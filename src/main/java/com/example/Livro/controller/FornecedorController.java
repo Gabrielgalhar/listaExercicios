@@ -36,4 +36,14 @@ public class FornecedorController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        if (!fornecedorRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        fornecedorRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
