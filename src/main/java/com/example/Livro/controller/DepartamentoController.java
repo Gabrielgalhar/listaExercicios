@@ -28,4 +28,21 @@ public class DepartamentoController {
     public ResponseEntity<List<Departamento>> listar() {
         return ResponseEntity.ok(departamentoRepository.findAll());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Departamento> buscarPorId(@PathVariable Long id) {
+        return departamentoRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        if (!departamentoRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        departamentoRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
