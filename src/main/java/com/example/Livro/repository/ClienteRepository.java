@@ -1,4 +1,7 @@
 package com.example.Livro.repository;
 
-public interface ClienteRepository {
+import com.example.Livro.entity.Cliente;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 }
