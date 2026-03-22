@@ -28,4 +28,11 @@ public class TarefaController {
     public ResponseEntity<List<Tarefa>> listar() {
         return ResponseEntity.ok(tarefaService.listarTodos());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Tarefa> buscarPorId(@PathVariable Long id) {
+        return tarefaService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
