@@ -1,5 +1,7 @@
 package com.example.Livro.controller;
 
+import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
 import com.example.Livro.entity.Fornecedor;
 import com.example.Livro.repository.FornecedorRepository;
 import org.springframework.http.HttpStatus;
@@ -20,5 +22,11 @@ public class FornecedorController {
     public ResponseEntity<Fornecedor> criar(@RequestBody Fornecedor fornecedor) {
         Fornecedor salvo = fornecedorRepository.save(fornecedor);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Fornecedor>> listar() {
+        List<Fornecedor> lista = fornecedorRepository.findAll();
+        return ResponseEntity.ok(lista);
     }
 }
