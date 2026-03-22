@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/tarefas")
 public class TarefaController {
@@ -20,5 +22,10 @@ public class TarefaController {
     public ResponseEntity<Tarefa> criar(@RequestBody Tarefa tarefa) {
         Tarefa salvo = tarefaService.salvar(tarefa);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Tarefa>> listar() {
+        return ResponseEntity.ok(tarefaService.listarTodos());
     }
 }
