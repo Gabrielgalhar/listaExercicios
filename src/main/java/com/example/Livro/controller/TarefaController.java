@@ -1,39 +1,48 @@
-package com.example.Livro.service;
+package com.example.Livro.controller;
 
 import com.example.Livro.entity.Tarefa;
-import com.example.Livro.repository.TarefaRepository;
-import org.springframework.stereotype.Service;
+import com.example.Livro.service.TarefaService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
-public class TarefaService {
+@RestController
+@RequestMapping("/tarefas")
+public class TarefaController {
 
-    private final TarefaRepository tarefaRepository;
+    private final TarefaService tarefaService;
 
-    public TarefaService(TarefaRepository tarefaRepository) {
-        this.tarefaRepository = tarefaRepository;
+    public TarefaController(TarefaService tarefaService) {
+        this.tarefaService = tarefaService;
     }
 
-    public Tarefa salvar(Tarefa tarefa) {
-        return tarefaRepository.save(tarefa);
+    @PostMapping
+    public ResponseEntity<Tarefa> criar(@RequestBody Tarefa tarefa) {
+        Tarefa salva = tarefaService.salvar(tarefa);
+        return ResponseEntity.status(HttpStatus.CREATED).body(salva);
     }
 
-    public List<Tarefa> listarTodos() {
-        return tarefaRepository.findAll();
+    @GetMapping
+    public ResponseEntity<List<Tarefa>> listar() {
+        return ResponseEntity.ok(tarefaService.listarTodos());
     }
 
-    public Optional<Tarefa> buscarPorId(Long id) {
-        return tarefaRepository.findById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Tarefa> buscarPorId(@PathVariable Long id) {
+        return tarefaService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    public boolean existePorId(Long id) {
-        return tarefaRepository.existsById(id);
-    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        if (!tarefaService.existePorId(id)) {
+            return ResponseEntity.notFound().build();
+        }
 
-    // 🔥 AQUI ESTÁ O DELETE NO SERVICE
-    public void deletarPorId(Long id) {
-        tarefaRepository.deleteById(id);
+        tarefaService.deletarPorId(id);
+        return ResponseEntity.noContent().build();
     }
 }
