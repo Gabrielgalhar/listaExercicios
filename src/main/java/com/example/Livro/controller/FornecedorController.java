@@ -29,4 +29,11 @@ public class FornecedorController {
         List<Fornecedor> lista = fornecedorRepository.findAll();
         return ResponseEntity.ok(lista);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Fornecedor> buscarPorId(@PathVariable Long id) {
+        return fornecedorRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
