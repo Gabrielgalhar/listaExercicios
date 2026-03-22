@@ -1,7 +1,7 @@
 package com.example.Livro.controller;
 
 import com.example.Livro.entity.Departamento;
-import com.example.Livro.repository.DepartamentoRepository;
+import com.example.Livro.service.DepartamentoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,37 +12,37 @@ import java.util.List;
 @RequestMapping("/departamentos")
 public class DepartamentoController {
 
-    private final DepartamentoRepository departamentoRepository;
+    private final DepartamentoService departamentoService;
 
-    public DepartamentoController(DepartamentoRepository departamentoRepository) {
-        this.departamentoRepository = departamentoRepository;
+    public DepartamentoController(DepartamentoService departamentoService) {
+        this.departamentoService = departamentoService;
     }
 
     @PostMapping
     public ResponseEntity<Departamento> criar(@RequestBody Departamento departamento) {
-        Departamento salvo = departamentoRepository.save(departamento);
+        Departamento salvo = departamentoService.salvar(departamento);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 
     @GetMapping
     public ResponseEntity<List<Departamento>> listar() {
-        return ResponseEntity.ok(departamentoRepository.findAll());
+        return ResponseEntity.ok(departamentoService.listarTodos());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Departamento> buscarPorId(@PathVariable Long id) {
-        return departamentoRepository.findById(id)
+        return departamentoService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        if (!departamentoRepository.existsById(id)) {
+        if (!departamentoService.existePorId(id)) {
             return ResponseEntity.notFound().build();
         }
 
-        departamentoRepository.deleteById(id);
+        departamentoService.deletarPorId(id);
         return ResponseEntity.noContent().build();
     }
 }
