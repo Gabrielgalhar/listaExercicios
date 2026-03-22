@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/departamentos")
 public class DepartamentoController {
@@ -20,5 +22,10 @@ public class DepartamentoController {
     public ResponseEntity<Departamento> criar(@RequestBody Departamento departamento) {
         Departamento salvo = departamentoRepository.save(departamento);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Departamento>> listar() {
+        return ResponseEntity.ok(departamentoRepository.findAll());
     }
 }
