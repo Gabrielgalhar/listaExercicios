@@ -35,14 +35,4 @@ public class ProjetoController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        if (!projetoService.existePorId(id)) {
-            return ResponseEntity.notFound().build();
-        }
-
-        projetoService.deletarPorId(id);
-        return ResponseEntity.noContent().build();
-    }
 }
